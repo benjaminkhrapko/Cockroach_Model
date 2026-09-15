@@ -23,15 +23,26 @@ for t in range(1,max_time+1):
         all_positions[t]=new_position
         ap=new_position
 
-# Draw each step as its own line. Color goes from blue (old) to red (new).
+x = all_positions[:, 0]
+y = all_positions[:, 1]
+
 for t in range(max_time):
-        red = t / max_time
-        blue = 1 - t / max_time
-        plt.plot(
-            [all_positions[t, 0], all_positions[t + 1, 0]],
-            [all_positions[t, 1], all_positions[t + 1, 1]],
-            color=(red, 0, blue),
-        )
+    progress = t / max_time
+
+    if progress < 0.25:
+        color = "blue"
+    elif progress < 0.50:
+        color = "green"
+    elif progress < 0.75:
+        color = "orange"
+    else:
+        color = "red"
+
+    plt.plot(
+        [x[t], x[t + 1]],
+        [y[t], y[t + 1]],
+        color=color
+    )
 
 plt.title('Random Walk')
 plt.xlabel('X Position')
