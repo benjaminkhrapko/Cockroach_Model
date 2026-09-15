@@ -23,10 +23,16 @@ for t in range(1,max_time+1):
         all_positions[t]=new_position
         ap=new_position
 
-x = all_positions[:, 0]
-y = all_positions[:, 1]
+# Draw each step as its own line. Color goes from blue (old) to red (new).
+for t in range(max_time):
+        red = t / max_time
+        blue = 1 - t / max_time
+        plt.plot(
+            [all_positions[t, 0], all_positions[t + 1, 0]],
+            [all_positions[t, 1], all_positions[t + 1, 1]],
+            color=(red, 0, blue),
+        )
 
-plt.plot(x, y)
 plt.title('Random Walk')
 plt.xlabel('X Position')
 plt.ylabel('Y Position')
