@@ -47,5 +47,7 @@ for t in range(max_time):
 plt.title('Random Walk')
 plt.xlabel('X Position')
 plt.ylabel('Y Position')
+plt.scatter(0, 0, s=100, c='black', zorder = 5)
 plt.axis('equal')
 plt.show()
+
