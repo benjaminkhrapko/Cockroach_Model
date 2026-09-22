@@ -50,7 +50,7 @@ for t in range(num_steps):
             Q = theta[k] / (1 + rho * density ** 2)
             p_stay = np.exp(-Q * dt)
             p_leave = 1 - p_stay
-
+# Shelter 0 has the lowest brightness (theta), which gives it a lower leaving rate (Q) and therefore a higher probability of staying, although density and shelter capacity also affect this probability.
             action = np.random.choice(
                 ["stay", "leave"],
                 p=[p_stay, p_leave]
@@ -61,11 +61,11 @@ for t in range(num_steps):
 
     agents = new_agents
     agent_history[t + 1] = agents
-    state_counts[t + 1, 0] = np.sum(agents == -1)
+    state_counts[t + 1, 0] = np.sum(agents == -1) #coutns the uncommite agents
     for k in range(num_shelters):
-        state_counts[t + 1, k + 1] = np.sum(agents == k)
-
-time = np.arange(num_steps + 1) * dt
+        state_counts[t + 1, k + 1] = np.sum(agents == k) # counts how many agents are in each shelter and stores it in the state_counts array, which will be used for plotting later.
+#k+1 bc column 0 is already used for uncommite agents
+time = np.arange(num_steps + 1) * dt #this creates an array of time points corresponding to each step in the simulation, which will be used for plotting the results.
 
 plt.plot(
     time,
@@ -81,8 +81,10 @@ for k in range(num_shelters):
         label=f"Shelter {k}"
     )
 
-plt.xlabel("Time")
-plt.ylabel("Number of agents")
-plt.title("Model 2: Cockroach Shelter Aggregation")
-plt.legend()
-plt.show()
+#plt.xlabel("Time")
+#plt.ylabel("Number of agents")
+#plt.title("Model 2: Cockroach Shelter Aggregation")
+#plt.legend()
+#plt.show()
+
+print(agent_history[50, 3])
