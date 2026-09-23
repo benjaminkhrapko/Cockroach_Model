@@ -6,13 +6,13 @@ rho = 1667
 mu = 0.9
 
 num_agents = 50
-num_shelters = 3
+num_shelters = 5
 
-max_time = 100
+max_time = 1000
 num_steps = int(max_time / dt)
 
-theta = np.array([1.0, 1.5, 2.0])
-phi = np.array([100, 125, 150])
+theta = np.array([1.0, 1.1, 1.2, 1.3, 1.4])
+phi = np.array([100, 125, 150, 175, 200])
 agents = np.full(num_agents, -1) # all agents start out uncommitted, represented by -1
 
 agent_history = np.zeros(
@@ -57,25 +57,26 @@ for t in range(num_steps):
                 if entry == "accept":
                     new_agents[i] = shelter
                     
-                else:
-                     k = current_state
+        else:
+                
+            k = current_state
+        
+            density = shelter_counts[k] / phi[k]
+        
+            Q = theta[k] / (
+            1 + rho * density)  #if density increasas, q decreases. when conversion to probability, p_stay increases and p_leave decreases. so if density is high, the agent is more likely to stay in the shelter.
                     
-                     density = shelter_counts[k] / phi[k]
+        
+            p_stay = np.exp(-Q * dt) #P(stay)= e^(-Q*dt) . INVERSE
+            p_leave = 1 - p_stay
+        
+            action = np.random.choice(
+                        ["stay", "leave"],
+                        p=[p_stay, p_leave]
+                    )
                     
-                     Q = theta[k] / (
-                     1 + rho * density ** 2)  #if density increasas, q decreases. when conversion to probability, p_stay increases and p_leave decreases. so if density is high, the agent is more likely to stay in the shelter.
-                                
-                    
-                     p_stay = np.exp(-Q * dt) #P(stay)= e^(-Q*dt) . INVERSE
-                     p_leave = 1 - p_stay
-                    
-                     action = np.random.choice(
-                                    ["stay", "leave"],
-                                    p=[p_stay, p_leave]
-                                )
-                    
-                     if action == "leave": #agent uncommited again, becomes "-1"
-                        new_agents[i] = -1
+            if action == "leave": #agent uncommited again, becomes "-1"
+                new_agents[i] = -1
     agents = new_agents #updates everyone
     agent_history[t + 1] = agents
     state_counts[t + 1, 0] = np.sum(agents == -1)
